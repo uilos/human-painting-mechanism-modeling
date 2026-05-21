@@ -12,17 +12,43 @@ A computational framework for modeling human painting as process, action, materi
 ## Framework
 ```mermaid
 flowchart TD
-    A[Experience / Need] --> B[Target Experience State T]
-    B --> C[Current Canvas C_t]
-    C --> D[Canvas State S_t]
-    D --> E[Gap / Diagnosis E_t]
-    E --> F[Painting Action a_t]
-    F --> G[Material-Trace Function F]
-    G --> H[Updated Canvas C_t+1]
-    H --> D
-    E --> I{Stop?}
-    I -->|Yes| J[Finished Painting]
-    I -->|No| F
+    A[Experience / Need] --> B[Target Model]
+    B --> C[Target Experience State T]
+
+    D[Current Canvas C_t] --> E[Canvas State Encoder]
+    E --> F[Canvas State S_t]
+
+    C --> G[Constraint Evaluator]
+    F --> G
+    G --> H[Diagnosis / Gap E_t]
+
+    H --> I[Action Generator / Policy]
+    F --> I
+    J[Painter Strategy θ] --> I
+    K[Constraint Library] --> G
+    K --> I
+
+    I --> L[Candidate Actions]
+    L --> M[Counterfactual Simulator]
+    M --> N[Selected Action a_t]
+
+    N --> O[Material-Trace Renderer]
+    D --> O
+    O --> P[Updated Canvas C_t+1]
+
+    P --> E
+
+    H --> Q[Revision Model]
+    Q --> I
+
+    F --> R[Stop Model]
+    C --> R
+    S[Painting History H_t] --> R
+    R -->|Continue| I
+    R -->|Stop| T2[Finished Painting]
+
+    N --> S
+    H --> S
 ```
     
 ## Modules
